@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Predict Car Price</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='./style.css') }}">
+  
+</head>
+
+<body>
+ <div class="login">
+	<h1>Predict Car Price</h1>
+
+     <!-- Form to enter new data for predictions  -->
+    <form action="{{ url_for('predict')}}"method="POST">
+         <select  class="form-control" name="carbody" id="carbody" required="required">
+		<option value=""> Select Carbody </option>
+  		<option value="sedan">Sedan</option>
+  		<option value="hatchback">Hatchback</option>
+  		<option value="wagon">Wagon</option>
+  		<option value="hardtop">Hardtop</option>
+		<option value="convertible">Convertible</option>
+	</select>
+    	<input type="text" name="wheelbase" placeholder="wheelbase" required="required" /><br>
+        <input type="text" name="carlength" placeholder="carlength" required="required" /><br>
+        <input type="text" name="carwidth" placeholder="carwidth" required="required" /><br>
+        <input type="text" name="carheight" placeholder="carheight" required="required" /><br>
+        <input type="text" name="curbweight" placeholder="curbweight" required="required" /><br>
+	<input type="text" name="enginesize" placeholder="enginesize" required="required" /><br>
+         <select name="fuelsystem" id="fuelsystem" required="required">
+		<option value=""> Select fuel system </option>
+  		<option value="mpfi">mpfi</option>
+  		<option value="2bbi">2bbi</option>
+  		<option value="idi">idi</option>
+  		<option value="1bbi">1bbi</option>
+		<option value="spdi">spdi</option>
+		<option value="4bbi">4bbi</option>
+		<option value="mfi">mfi</option>
+		<option value="spfi">spfi</option>
+	</select>
+	<input type="text" name="boreratio" placeholder="boreratio" required="required" /><br>
+	<input type="text" name="stroke" placeholder="stroke" required="required" /><br>
+	<input type="text" name="compressionratio" placeholder="compressionratio" required="required" /><br>
+	<input type="text" name="horsepower" placeholder="horsepower" required="required" /><br>
+	<input type="text" name="peakrpm" placeholder="peakrpm" required="required" /><br>
+	<input type="text" name="citympg" placeholder="citympg" required="required" /><br>
+	<input type="text" name="highwaympg" placeholder="highwaympg" required="required" /><br>
+	
+        <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+    </form>
+
+   <br>
+   <br>
+  
+   
+ </div>
+ {{pred}}
+
+</body>
+</html>

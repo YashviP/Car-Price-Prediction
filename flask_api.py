@@ -1,111 +1,26 @@
-from flask import Flask, request
+from flask import Flask,request, url_for, redirect, render_template
 import numpy as np
 import pickle
+import os
 import pandas as pd
 import flasgger
-from flasgger import Swagger
 
 app=Flask(__name__)
-Swagger(app)
+port = int(os.environ.get("PORT", 5000))
 
 pickle_in = open("car_model.pkl","rb")
 car_model=pickle.load(pickle_in)
-print(car_model)
+
+
 @app.route('/')
 def welcome():
-	return "welcome all"
+	 return render_template("home.html")
 
-@app.route('/a',methods=["Get"])
-def predict_note_authentication():
-    
-	"""Let's Authenticate the Banks Note 
-    This is using docstrings for specifications.
-    ---
-    parameters: 
-      - name: carbody
-        in: query
-        type: string
-        description: "enter your car body"
-        enum: ["convertible","hatchback","sedan","wagon","hardtop"]
-        required: true
-
-      - name: wheelbase
-        in: query
-        type: number
-        required: true
-
-      - name: carlength
-        in: query
-        type: number
-        required: true
-
-      - name: carwidth
-        in: query
-        type: number
-        required: true
-
-      - name: carheight
-        in: query
-        type: number
-        required: true
-      
-      - name: curbweight
-        in: query
-        type: number
-        required: true
-
-      - name: enginesize
-        in: query
-        type: number
-        required: true
-
-      - name: fuelsystem
-        in: query
-        type: string
-        description: "enter fuel system"
-        enum: ["mpfi","2bbi","idi","1bbi","spdi","4bbi","mfi","spfi"]
-        required: true
-
-      - name: boreratio
-        in: query
-        type: number
-        required: true
-
-      - name: stroke
-        in: query
-        type: number
-        required: true
-
-      - name: compressionratio
-        in: query
-        type: number
-        required: true
-
-      - name: horsepower
-        in: query
-        type: number
-        required: true
-
-      - name: peakrpm
-        in: query
-        type: number
-        required: true
-
-      - name: citympg
-        in: query
-        type: number
-        required: true
-
-      - name: highwaympg
-        in: query
-        type: number
-        required: true
-
-    responses:
-        200:
-            description: The output values
-	""" 
-	carbody=request.args.get("carbody")
+@app.route('/predict',methods=["POST"])
+def predict():
+	features= [x for x in request.form.values()]
+	print(features)
+	carbody=features[0]
 	if carbody=="sedan":
 		carbody=3
 	elif carbody=="hatchback":
@@ -116,13 +31,8 @@ def predict_note_authentication():
 		carbody=1
 	elif carbody=="convertible":
 		carbody=0
-	wheelbase=request.args.get("wheelbase")
-	carlength=request.args.get("carlength")
-	carwidth=request.args.get("carwidth")
-	carheight=request.args.get("carheight")
-	curbweight=request.args.get("curbweight")
-	enginesize=request.args.get("enginesize")
-	fuelsystem=request.args.get("fuelsystem")
+	features[0]=carbody
+	fuelsystem=features[7]
     
 	if fuelsystem=="mpfi":
 		fuelsystem=5
@@ -140,20 +50,14 @@ def predict_note_authentication():
 		fuelsystem=7
 	elif fuelsystem=="spfi":
 		fuelsystem=4
-   
-	boreratio=request.args.get("boreratio")
-	stroke=request.args.get("stroke")
-	compressionratio=request.args.get("compressionratio")
-	horsepower=request.args.get("horsepower")
-	peakrpm=request.args.get("peakrpm")
-	citympg=request.args.get("citympg")
-	highwaympg=request.args.get("highwaympg")
-    
-	prediction=car_model.predict([[carbody,wheelbase,carlength,carwidth,carheight,curbweight,enginesize, 				fuelsystem,boreratio,stroke,compressionratio,horsepower,peakrpm,citympg,highwaympg]])
+	features[7]=fuelsystem
+	
+	features =  [float(x) for x in features]
+	prediction=float(car_model.predict([features]))
 	print(prediction)
-	return "Hello The answer is"+ str(prediction)
+	return render_template('home.html',pred='Expected Price will be {}'.format(prediction))
 	                								   	
  	  
 if __name__=='__main__':
-	app.run(debug=True,host='0.0.0.0')
+	app.run(debug=True,host='0.0.0.0',port=port)
     
