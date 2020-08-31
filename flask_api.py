@@ -55,7 +55,7 @@ def predict():
 	features =  [float(x) for x in features]
 	prediction=float(car_model.predict([features]))
 	print(prediction)
-	return render_template('home.html',pred='Expected Price will be {}'.format(prediction))
+	return render_template('home.html',pred='Expected Price will be {} $'.format(prediction))
 	                								   	
  	  
 if __name__=='__main__':
