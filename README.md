@@ -17,6 +17,7 @@ complete EDA and modelling - https://www.kaggle.com/yashvi/car-price-prediction-
 
 1. created a flask application
 2. containerise the flask application using Docker and test locally
+
   2.1 for building docker images , run the following command 
   
         docker build -t image_name:version .
